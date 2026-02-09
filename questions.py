@@ -1,41 +1,55 @@
 # questions.py
 
-# Categorized initial data bank
-initial_questions = [
+# 1. USER AUTHENTICATION DATABASE
+# You can add more students here as needed
+users = {
+    "admin": {"password": "Bhawarth@79", "role": "admin"},
+    "student": {"password": "password", "role": "student"},
+    
+}
+
+# 2. INITIAL SEED QUESTIONS (Pre-loaded data)
+# These will show up as soon as the app starts
+initial_data = [
     {
-        "category": "3 Marks Theory",
-        "question": "State any three special characteristics of a Friend Function.",
-        "answer": "1. Not in the scope of the class. 2. Can be called without an object. 3. Has access to private members."
+        "category": "3 Marks Theory", 
+        "question": "What is a Friend Function in C++?", 
+        "answer": "A friend function is a function that is not a member of a class but has access to its private and protected members."
     },
     {
-        "category": "4 Marks Theory",
-        "question": "Explain the concept of Virtual Memory in detail.",
-        "answer": "Virtual memory is a memory management technique that creates an illusion of a very large main memory by using disk space..."
+        "category": "4 Marks Theory", 
+        "question": "Explain the concept of Virtual Memory.", 
+        "answer": "Virtual memory is a memory management technique that provides an idealized abstraction of the storage resources that are actually available on a given machine."
     },
     {
-        "category": "C++ Programs",
-        "question": "Write a C++ program to find the largest of three numbers.",
+        "category": "C++ Programs", 
+        "question": "Write a C++ program to find the factorial of a number.", 
         "answer": """#include <iostream>
 using namespace std;
 int main() {
-    int a, b, c;
-    cout << "Enter three numbers: ";
-    cin >> a >> b >> c;
-    if(a>=b && a>=c) cout << a << " is largest";
-    else if(b>=a && b>=c) cout << b << " is largest";
-    else cout << c << " is largest";
+    int n;
+    long factorial = 1.0;
+    cout << "Enter a positive integer: ";
+    cin >> n;
+    for(int i = 1; i <= n; ++i) {
+        factorial *= i;
+    }
+    cout << "Factorial of " << n << " = " << factorial;    
     return 0;
 }"""
     },
     {
-        "category": "HTML Programs",
-        "question": "Write HTML code to create a link to 'google.com' that opens in a new tab.",
-        "answer": '<a href="https://www.google.com" target="_blank">Visit Google</a>'
+        "category": "HTML Programs", 
+        "question": "Write HTML code to create a simple 2x2 table.", 
+        "answer": """<table border="1">
+  <tr>
+    <td>Row 1, Col 1</td>
+    <td>Row 1, Col 2</td>
+  </tr>
+  <tr>
+    <td>Row 2, Col 1</td>
+    <td>Row 2, Col 2</td>
+  </tr>
+</table>"""
     }
 ]
-
-# User database
-users = {
-    "admin": {"password": "Bhawarth@79", "role": "admin"},
-    "student": {"password": "password", "role": "student"}
-}

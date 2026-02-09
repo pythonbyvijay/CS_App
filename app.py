@@ -81,7 +81,7 @@ else:
         st.header("📥 Student Download Area")
         # 1. Download Question Bank
         q_df = pd.DataFrame(st.session_state.question_list)
-        st.download_button("📥 Download All Questions (CSV)", q_df.to_csv(index=False), "CS_Questions.csv")
+        st.download_button("📥 Download All Questions (CSV)", q_df.to_csv(index=False), "CS_Questions.pdf")
         
         st.divider()
         st.subheader("Reference PDFs")

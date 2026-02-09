@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 import datetime
-from questions import initial_questions, users
+from questions import initial_data, users
 
 st.set_page_config(page_title="HSC CS Paper I Portal", layout="wide")
 

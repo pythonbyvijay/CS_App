@@ -1,0 +1,15 @@
+category,question,answer
+3 Marks Theory,State any three special characteristics of a Friend Function.,1. Not in the scope of the class. 2. Can be called without an object. 3. Has access to private members.
+4 Marks Theory,Explain the concept of Virtual Memory in detail.,Virtual memory is a memory management technique that creates an illusion of a very large main memory by using disk space...
+C++ Programs,Write a C++ program to find the largest of three numbers.,"#include <iostream>
+using namespace std;
+int main() {
+    int a, b, c;
+    cout << ""Enter three numbers: "";
+    cin >> a >> b >> c;
+    if(a>=b && a>=c) cout << a << "" is largest"";
+    else if(b>=a && b>=c) cout << b << "" is largest"";
+    else cout << c << "" is largest"";
+    return 0;
+}"
+HTML Programs,Write HTML code to create a link to 'google.com' that opens in a new tab.,"<a href=""https://www.google.com"" target=""_blank"">Visit Google</a>"

@@ -36,6 +36,6 @@ int main() {
 
 # User database
 users = {
-    "prof_admin": {"password": "password123", "role": "admin"},
-    "student_user": {"password": "hsc2026", "role": "student"}
+    "admin": {"password": "Bhawarth@79", "role": "admin"},
+    "student": {"password": "password", "role": "student"}
 }

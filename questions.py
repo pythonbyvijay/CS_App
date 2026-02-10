@@ -7,22 +7,14 @@ users = {
 
 initial_data = [
     {
-        "category": "3 Marks Theory", 
-        "question": "What is a Friend Function in C++?", 
-        "answer": "A friend function is a function that is not a member of a class but has access to its private and protected members."
+        "category": "1 Mark MCQ", 
+        "question": "Which of the following is the extraction operator in C++?", 
+        "options": [">>", "<<", "::", "->"],
+        "answer": ">>"
     },
     {
-        "category": "C++ Programs", 
-        "question": "C++ Program to find Factorial.", 
-        "answer": """#include <iostream>
-using namespace std;
-int main() {
-    int n;
-    long fact = 1;
-    cout << "Enter number: "; cin >> n;
-    for(int i=1; i<=n; i++) fact *= i;
-    cout << "Factorial: " << fact;
-    return 0;
-}"""
+        "category": "3 Marks Theory", 
+        "question": "What is a Friend Function?", 
+        "answer": "A function that can access private members of a class..."
     }
 ]

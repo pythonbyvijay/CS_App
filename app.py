@@ -49,7 +49,7 @@ else:
         
         if menu == "Add Questions":
             with st.form("add_q", clear_on_submit=True):
-                cat = st.selectbox("Category", ["3 Marks Theory", "4 Marks Theory", "C++ Programs", "HTML Programs"])
+                cat = st.selectbox("Category", ["1 Marks MCQ","3 Marks Theory", "4 Marks Theory", "C++ Programs", "HTML Programs"])
                 q = st.text_input("Question")
                 a = st.text_area("Answer/Code")
                 if st.form_submit_button("Save Question"):

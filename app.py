@@ -96,4 +96,28 @@ else:
             with st.container(border=True):
                 st.write(f"**{item['category']}**: {item['question']}")
                 
-                if item['category'] == "
+                if item['category'] == "1 Mark MCQ":
+                    choice = st.radio(f"Select Option (Q{idx})", item['options'], key=f"mcq_{idx}")
+                    if st.button(f"Check Answer (Q{idx})"):
+                        if choice == item['answer']: st.success("Correct!")
+                        else: st.error(f"Incorrect! Answer: {item['answer']}")
+                else:
+                    with st.expander("View Answer"):
+                        if "Program" in item['category']: st.code(item['answer'])
+                        else: st.write(item['answer'])
+
+    # --- SHARED: DOWNLOAD CENTER ---
+    elif menu == "Download Center":
+        st.header("📥 Downloads")
+        
+        # Download all questions as CSV
+        df = pd.DataFrame(st.session_state.question_list)
+        st.download_button("📥 Download Question Bank (CSV)", df.to_pdf(index=False), "CS_Questions.pdf")
+        
+        st.divider()
+        st.subheader("PDF Documents")
+        if st.session_state.uploaded_files_list:
+            for f in st.session_state.uploaded_files_list:
+                st.download_button(f"📄 Download {f['name']}", f['content'], file_name=f['name'])
+        else:
+            st.info("No PDF files available yet.")

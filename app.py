@@ -45,7 +45,7 @@ else:
     # --- ADMIN VIEW ---
     if st.session_state.role == "admin":
         st.title("👨‍🏫 Professor Dashboard")
-        menu = st.sidebar.selectbox("Admin Menu", ["Add Questions", "Upload Resources"])
+        menu = st.sidebar.selectbox("Admin Menu", ["Add Questions", "Upload Notes"])
         
         if menu == "Add Questions":
             with st.form("add_q", clear_on_submit=True):
@@ -56,7 +56,7 @@ else:
                     st.session_state.question_list.append({"category": cat, "question": q, "answer": a})
                     st.success("Question saved!")
 
-        elif menu == "Upload Resources":
+        elif menu == "Upload Notes":
             # Multi-file uploader logic
             uploaded = st.file_uploader("Upload Multiple PDFs", type="pdf", accept_multiple_files=True)
             if st.button("Commit Uploads"):
@@ -68,7 +68,7 @@ else:
 
     # --- SHARED VIEW FOR STUDENT & ADMIN ---
     st.divider()
-    view_mode = st.radio("Switch Section:", ["Revision Bank", "Download Center"], horizontal=True)
+    view_mode = st.radio("Switch Section:", ["Revision Bank", "Downloads"], horizontal=True)
 
     if view_mode == "Revision Bank":
         st.header("📖 Study Materials")
@@ -77,7 +77,7 @@ else:
                 if "Program" in q['category']: st.code(q['answer'], language="cpp")
                 else: st.write(q['answer'])
 
-    elif view_mode == "Download Center":
+    elif view_mode == "Downloads":
         st.header("📥 Student Download Area")
         # 1. Download Question Bank
         q_df = pd.DataFrame(st.session_state.question_list)

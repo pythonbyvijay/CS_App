@@ -50,11 +50,9 @@ else:
    # --- SHARED: DOWNLOAD CENTER ---
     if menu == "Download Center":
         st.header("📥 Student Download Center")
-        st.info("You can view files directly in your browser or download them for offline use.")
-
+        
         resource_map = {
             "📅 1. Previous Year Question Papers": "papers",
-            # "🔢 2. 1 Mark Questions PDF": "1 Mark Questions PDF",  # Still hidden as requested
             "📁 Chapter 1: Operating System": "Operating System Notes",
             "📁 Chapter 2: Data Structure": "Data Structure Notes",
             "📁 Chapter 3: C++": "C++ Notes",
@@ -69,39 +67,42 @@ else:
                         for filename in files:
                             file_path = os.path.join(folder_path, filename)
                             
-                            # Create two columns for View and Download buttons
-                            col1, col2 = st.columns([0.7, 0.3])
+                            # Row Layout: Filename | View Button | Download Button
+                            col_name, col_view, col_dl = st.columns([0.5, 0.25, 0.25])
                             
-                            with col1:
+                            with col_name:
                                 st.write(f"📄 {filename}")
                             
-                            with col2:
-                                # 1. View Button (Opens PDF in new tab)
-                                # Note: This works best when deployed. Locally, it uses the file path.
+                            with col_view:
+                                # Reading file for the View/Download actions
                                 with open(file_path, "rb") as f:
                                     pdf_bytes = f.read()
                                 
-                                # 2. Download Button
-                                st.download_button(
-                                    label="💾 Download",
-                                    data=pdf_bytes,
-                                    file_name=filename,
-                                    key=f"dl_{filename}",
-                                    use_container_width=True
-                                )
-                                
-                                # 3. View Link (Styled as a button using markdown)
-                                # This creates a clickable link that opens the PDF in a new browser tab
+                                # Using a Link styled as a button for "View" to avoid browser blocking
                                 import base64
                                 base64_pdf = base64.b64encode(pdf_bytes).decode('utf-8')
-                                pdf_display = f'<a href="data:application/pdf;base64,{base64_pdf}" target="_blank" style="text-decoration: none;"><button style="width: 100%; cursor: pointer; background-color: #4CAF50; color: white; border: none; padding: 5px; border-radius: 5px;">👁️ View</button></a>'
-                                st.markdown(pdf_display, unsafe_allow_html=True)
+                                
+                                # This creates a cleaner HTML link that acts as a view button
+                                view_html = f'''
+                                    <a href="data:application/pdf;base64,{base64_pdf}" target="_blank" style="text-decoration: none;">
+                                        <div style="background-color: #ff4b4b; color: white; padding: 0.5rem; text-align: center; border-radius: 0.5rem; font-size: 0.8rem; font-weight: bold;">
+                                            👁️ VIEW
+                                        </div>
+                                    </a>
+                                '''
+                                st.markdown(view_html, unsafe_allow_html=True)
                             
-                            st.divider() # Adds a thin line between files
+                            with col_dl:
+                                st.download_button(
+                                    label="💾 DOWNLOAD",
+                                    data=pdf_bytes,
+                                    file_name=filename,
+                                    key=f"dl_{folder_path}_{filename}",
+                                    use_container_width=True
+                                )
+                            st.write("") # Small spacing
                     else:
                         st.write("No PDF files found.")
-                else:
-                    st.warning(f"Folder '{folder_path}' not found.")
     # --- ADMIN: ADD QUESTIONS ---
     elif menu == "Add Questions":
         st.header("➕ Add New Questions")

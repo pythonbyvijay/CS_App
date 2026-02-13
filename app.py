@@ -47,15 +47,14 @@ else:
         st.session_state.logged_in = False
         st.rerun()
 
-    # --- SHARED: DOWNLOAD CENTER ---
+   # --- SHARED: DOWNLOAD CENTER ---
     if menu == "Download Center":
         st.header("📥 Student Download Center")
-        st.info("The following resources are fetched directly from the repository.")
+        st.info("You can view files directly in your browser or download them for offline use.")
 
-        # Mapping Display Names to your GitHub Folder Names
         resource_map = {
             "📅 1. Previous Year Question Papers": "papers",
-            # "🔢 2. 1 Mark Questions PDF": "1 Mark Questions PDF",  <-- TEMPORARILY HIDDEN
+            # "🔢 2. 1 Mark Questions PDF": "1 Mark Questions PDF",  # Still hidden as requested
             "📁 Chapter 1: Operating System": "Operating System Notes",
             "📁 Chapter 2: Data Structure": "Data Structure Notes",
             "📁 Chapter 3: C++": "C++ Notes",
@@ -69,18 +68,40 @@ else:
                     if files:
                         for filename in files:
                             file_path = os.path.join(folder_path, filename)
-                            with open(file_path, "rb") as f:
+                            
+                            # Create two columns for View and Download buttons
+                            col1, col2 = st.columns([0.7, 0.3])
+                            
+                            with col1:
+                                st.write(f"📄 {filename}")
+                            
+                            with col2:
+                                # 1. View Button (Opens PDF in new tab)
+                                # Note: This works best when deployed. Locally, it uses the file path.
+                                with open(file_path, "rb") as f:
+                                    pdf_bytes = f.read()
+                                
+                                # 2. Download Button
                                 st.download_button(
-                                    label=f"📄 Download {filename}",
-                                    data=f,
+                                    label="💾 Download",
+                                    data=pdf_bytes,
                                     file_name=filename,
-                                    key=f"dl_{folder_path}_{filename}"
+                                    key=f"dl_{filename}",
+                                    use_container_width=True
                                 )
+                                
+                                # 3. View Link (Styled as a button using markdown)
+                                # This creates a clickable link that opens the PDF in a new browser tab
+                                import base64
+                                base64_pdf = base64.b64encode(pdf_bytes).decode('utf-8')
+                                pdf_display = f'<a href="data:application/pdf;base64,{base64_pdf}" target="_blank" style="text-decoration: none;"><button style="width: 100%; cursor: pointer; background-color: #4CAF50; color: white; border: none; padding: 5px; border-radius: 5px;">👁️ View</button></a>'
+                                st.markdown(pdf_display, unsafe_allow_html=True)
+                            
+                            st.divider() # Adds a thin line between files
                     else:
-                        st.write("No PDF files found in this folder.")
+                        st.write("No PDF files found.")
                 else:
-                    st.warning(f"Folder '{folder_path}' not found in Repository.")
-
+                    st.warning(f"Folder '{folder_path}' not found.")
     # --- ADMIN: ADD QUESTIONS ---
     elif menu == "Add Questions":
         st.header("➕ Add New Questions")

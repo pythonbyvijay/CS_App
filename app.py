@@ -37,6 +37,7 @@ else:
     # --- NAVIGATION MENU ---
     st.sidebar.title(f"Welcome Prof. {st.session_state.user.capitalize()}")
     
+    # "Upload Resources" has been removed from Admin menu as requested
     if st.session_state.role == "admin":
         menu = st.sidebar.radio("Navigation", ["Add Questions", "Revision Bank", "Test Section", "Download Center"])
     else:
@@ -46,15 +47,15 @@ else:
         st.session_state.logged_in = False
         st.rerun()
 
-    # --- SHARED: DOWNLOAD CENTER (Reading from GitHub Folders) ---
+    # --- SHARED: DOWNLOAD CENTER ---
     if menu == "Download Center":
         st.header("📥 Student Download Center")
         st.info("The following resources are fetched directly from the repository.")
 
-        # Mapping Display Names to your actual GitHub Folder Names
+        # Mapping Display Names to your GitHub Folder Names
         resource_map = {
             "📅 1. Previous Year Question Papers": "papers",
-            "🔢 2. 1 Mark Questions PDF": "1 Mark Questions PDF", # Ensure this folder name matches exactly
+            # "🔢 2. 1 Mark Questions PDF": "1 Mark Questions PDF",  <-- TEMPORARILY HIDDEN
             "📁 Chapter 1: Operating System": "Operating System Notes",
             "📁 Chapter 2: Data Structure": "Data Structure Notes",
             "📁 Chapter 3: C++": "C++ Notes",
@@ -64,9 +65,7 @@ else:
         for label, folder_path in resource_map.items():
             with st.expander(label, expanded=True):
                 if os.path.exists(folder_path):
-                    # List all PDF files in the folder
                     files = [f for f in os.listdir(folder_path) if f.lower().endswith(".pdf")]
-                    
                     if files:
                         for filename in files:
                             file_path = os.path.join(folder_path, filename)
@@ -80,7 +79,7 @@ else:
                     else:
                         st.write("No PDF files found in this folder.")
                 else:
-                    st.warning(f"Folder '{folder_path}' not found. Please ensure it is uploaded to GitHub.")
+                    st.warning(f"Folder '{folder_path}' not found in Repository.")
 
     # --- ADMIN: ADD QUESTIONS ---
     elif menu == "Add Questions":
@@ -99,7 +98,7 @@ else:
                 entry = {"category": cat, "question": q_text, "answer": ans}
                 if cat == "1 Mark MCQ": entry["options"] = opts
                 st.session_state.question_list.append(entry)
-                st.success("Question added to current session!")
+                st.success("Question added!")
 
     # --- SHARED: REVISION BANK ---
     elif menu == "Revision Bank":

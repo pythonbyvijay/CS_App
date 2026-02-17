@@ -2,10 +2,10 @@
 
 users = {
     "admin": {"password": "Bhawarth@79", "role": "admin"},
-    "student1": {"password": "1234", "role": "student"}
-    "student2": {"password": "2345", "role": "student"}
-    "student3": {"password": "3456", "role": "student"}
-    "student4": {"password": "4567", "role": "student"}
+    "student1": {"password": "1234", "role": "student"},
+    "student2": {"password": "2345", "role": "student"},
+    "student3": {"password": "3456", "role": "student"},
+    "student4": {"password": "4567", "role": "student"},
     "student5": {"password": "5678", "role": "student"}
 }
 

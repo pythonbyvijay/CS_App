@@ -125,10 +125,43 @@ if not st.session_state.logged_in:
     st.markdown('</div>', unsafe_allow_html=True)
 
 # --- 5. MAIN PORTAL CONTENT ---
+# --- 5. MAIN PORTAL CONTENT ---
 else:
-    st.markdown("<style>[data-testid='stMainView'] { display: block !important; } .stApp { background: #eef2ff; overflow: auto; } header { visibility: visible !important; }</style>", unsafe_allow_html=True)
+    # This block RESETS the mobile view and removes the 'Fixed' login constraints
+    st.markdown("""
+        <style>
+        /* 1. Allow the page to scroll again */
+        html, body, [data-testid="stAppViewContainer"] {
+            overflow: auto !important;
+            height: auto !important;
+        }
+        
+        /* 2. Remove the 'flex centering' used for the login card */
+        [data-testid="stMainView"] {
+            display: block !important;
+        }
+        
+        /* 3. Reset the container width so it's not stuck at 30% on mobile */
+        .main .block-container {
+            max-width: 100% !important;
+            padding: 1rem !important;
+        }
+
+        /* 4. Show the sidebar and header properly */
+        header { visibility: visible !important; }
+        
+        /* 5. Set a simple professional background for the dashboard */
+        .stApp {
+            background: #f1f5f9 !important; /* Soft Slate Light Theme */
+            background-image: none !important;
+        }
+        
+        /* 6. Ensure text is dark/readable on mobile */
+        h1, h2, h3, p, label, .stMarkdown { color: #1e293b !important; }
+        </style>
+    """, unsafe_allow_html=True)
     
-    # --- Sidebar & Navigation ---
+    # ... Your existing Sidebar and Menu logic follows here ...    # --- Sidebar & Navigation ---
     st.sidebar.title(f"Welcome . {st.session_state.user.capitalize()}")
     
     if st.session_state.role == "admin":

@@ -1,254 +1,164 @@
 import streamlit as st
-import pandas as pd
-import datetime
-import os
-import base64
-from questions import users, initial_data
 
-# --- 1. PAGE CONFIG ---
-st.set_page_config(page_title="HSC CS Portal", layout="centered")
+# =========================================
+# 🔐 LOGIN CONFIG (CHANGE IF NEEDED)
+# =========================================
 
-# --- 2. UTILITY FUNCTIONS ---
-def get_base64_of_bin_file(bin_file):
-    try:
-        with open(bin_file, 'rb') as f:
-            data = f.read()
-        return base64.b64encode(data).decode()
-    except:
-        return ""
+USERNAME = "admin"
+PASSWORD = "1234"
 
-def set_background(png_file):
-    bin_str = get_base64_of_bin_file(png_file)
-    bg_style = f'''
-    <style>
-    html, body, [data-testid="stAppViewContainer"] {{
-        overflow: hidden !important;
-        height: 100vh;
-    }}
-    .stApp {{
-        background: url("data:image/png;base64,{bin_str}") no-repeat center center fixed;
-        background-size: cover;
-    }}
-    [data-testid="stMainView"] {{
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }}
-    .main .block-container {{
-        max-width: 30% !important;
-        min-width: 330px !important;
-        padding: 0 !important;
-        margin: auto !important;
-    }}
-    .login-card {{
-        background: rgba(15, 25, 45, 0.75);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        padding: 35px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-        text-align: center;
-        width: 100%;
-    }}
-    .header-bar {{
-        background: rgba(255, 255, 255, 0.1);
-        height: 60px;
-        width: 100%;
-        border-radius: 12px;
-        margin-bottom: 20px;
-    }}
-    h1, h2, h3, label, p {{ color: white !important; font-family: 'Segoe UI', sans-serif; }}
-    .stTextInput label {{
-        display: flex !important;
-        justify-content: flex-start !important;
-        font-size: 0.85em !important;
-    }}
-    .stTextInput input {{
-        background-color: #f1f3f4 !important;
-        color: #222 !important;
-        border-radius: 8px !important;
-        height: 42px !important;
-    }}
-    div.stButton > button {{
-        width: 100px !important;
-        background-color: #007bff !important;
-        color: white !important;
-        border: none !important;
-        height: 40px !important;
-    }}
-    div.stButton {{ display: flex; justify-content: flex-start; }}
-    header, footer, [data-testid="stHeader"] {{ visibility: hidden !important; }}
-    </style>
-    '''
-    st.markdown(bg_style, unsafe_allow_html=True)
+# =========================================
+# 🧠 SESSION STATE
+# =========================================
 
-# --- 3. SESSION STATE ---
-if 'question_list' not in st.session_state:
-    st.session_state.question_list = initial_data
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
-# --- 4. LOGIN INTERFACE ---
-if not st.session_state.logged_in:
-    set_background('background.jpg')
-    
-    st.markdown('<div class="login-card">', unsafe_allow_html=True)
-    st.markdown('<div class="header-bar"></div>', unsafe_allow_html=True)
-    
-    st.markdown("""
-        <div style='text-align: center; line-height: 0.75; margin-bottom: 10px;'>
-            <h1 style='font-size: 2.3em; margin: 0; padding: 0; font-weight: 800; letter-spacing: -1px;'>VIREXON</h1>
-            <h2 style='font-size: 1.9em; margin: 0; padding: 0; font-weight: 600;'>Intelligences</h2>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("<h3 style='font-size: 1.2em; font-weight: 400; margin-bottom: 30px;'>HSC CS Portal</h3>", unsafe_allow_html=True)
 
-    u = st.text_input("Username", placeholder="Username")
-    p = st.text_input("Password", type="password", placeholder="Password")
+# =========================================
+# 🔐 LOGIN PAGE WITH BACKGROUND IMAGE
+# =========================================
 
-    if st.button("LOGIN"):
-        with st.spinner("Authenticating..."):
-            if u in users and users[u]["password"] == p:
-                st.session_state.logged_in, st.session_state.role, st.session_state.user = True, users[u]["role"], u
-                st.rerun()
-            else:
-                st.error("Access Denied")
+def login_page():
 
-    st.markdown(f'''
-        <div style="margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-            <p style="font-size: 0.75em; opacity: 0.8; margin: 0;">copyright @Vijay Shinde</p>
-            <p style="font-size: 0.75em; opacity: 0.8; margin: 5px 0 0 0;">📞 +91 9730145654</p>
-        </div>
-    ''', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.set_page_config(
+        page_title="Login - CSD Library",
+        page_icon="🔐",
+        layout="centered"
+    )
 
-# --- 5. MAIN PORTAL CONTENT ---
-# --- 5. MAIN PORTAL CONTENT ---
-else:
-    # This block RESETS the mobile view and removes the 'Fixed' login constraints
-    st.markdown("""
+    # 🔥 Background Image CSS
+    st.markdown(
+        """
         <style>
-        /* 1. Allow the page to scroll again */
-        html, body, [data-testid="stAppViewContainer"] {
-            overflow: auto !important;
-            height: auto !important;
-        }
-        
-        /* 2. Remove the 'flex centering' used for the login card */
-        [data-testid="stMainView"] {
-            display: block !important;
-        }
-        
-        /* 3. Reset the container width so it's not stuck at 30% on mobile */
-        .main .block-container {
-            max-width: 100% !important;
-            padding: 1rem !important;
-        }
-
-        /* 4. Show the sidebar and header properly */
-        header { visibility: visible !important; }
-        
-        /* 5. Set a simple professional background for the dashboard */
         .stApp {
-            background: #f1f5f9 !important; /* Soft Slate Light Theme */
-            background-image: none !important;
+            background-image: url("background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
-        
-        /* 6. Ensure text is dark/readable on mobile */
-        h1, h2, h3, p, label, .stMarkdown { color: #1e293b !important; }
-        </style>
-    """, unsafe_allow_html=True)
-    
-    # ... Your existing Sidebar and Menu logic follows here ...    # --- Sidebar & Navigation ---
-    st.sidebar.title(f"Welcome . {st.session_state.user.capitalize()}")
-    
-    if st.session_state.role == "admin":
-        menu = st.sidebar.radio("Navigation", ["Add Questions", "Revision Bank", "Test Section", "Download Center"])
-    else:
-        menu = st.sidebar.radio("Navigation", ["Download Center"])
 
-    if st.sidebar.button("Logout"):
+        .login-box {
+            background: rgba(0,0,0,0.65);
+            padding: 40px;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .copyright {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # 🔐 Login UI
+    st.markdown('<div class="login-box">', unsafe_allow_html=True)
+
+    st.title("🔐 Login Required")
+
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+
+    if st.button("Login"):
+
+        if username == USERNAME and password == PASSWORD:
+            st.session_state.logged_in = True
+            st.success("Login successful ✅")
+            st.rerun()
+        else:
+            st.error("Invalid username or password ❌")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # 📞 Copyright
+    st.markdown(
+        '<div class="copyright">© Vijay Shinde 📞 +91 9730145654</div>',
+        unsafe_allow_html=True
+    )
+
+
+# =========================================
+# 📚 MAIN APP (PDF LIBRARY)
+# =========================================
+
+def main_app():
+
+    st.set_page_config(
+        page_title="CSD PDF Library",
+        page_icon="📚",
+        layout="wide"
+    )
+
+    if st.button("🚪 Logout"):
         st.session_state.logged_in = False
         st.rerun()
 
-    # --- Header: Countdown ---
-    exam_date = datetime.datetime(2026, 3, 10)
-    days_left = (exam_date - datetime.datetime.now()).days
-    st.title("🖥️ Computer Science  Portal")
-    st.subheader(f"⏳ Exam Countdown: {days_left} Days")
-    progress_val = int(max(0, min(100, 100 - (days_left/365)*100)))
-    st.progress(progress_val, text=f"Preparation Progress: {progress_val}%")
+    st.title("📚 CSD Question Papers & Notes")
+    st.write("Fast Google Drive Based Library")
 
-    # --- OPTIMIZED DOWNLOAD CENTER ---
-    if menu == "Download Center":
-        st.header("📥 Student Download Center")
-        
-        resource_map = {
-            "📅 1. Previous Year Question Papers": "papers",
-            "📁 Chapter 1: Operating System": "Operating System Notes",
-            "📁 Chapter 2: Data Structure": "Data Structure Notes",
-            "📁 Chapter 3: C++": "C++ Notes",
-            "📁 Chapter 4: HTML": "HTML Notes",
-	    "📁 C++ Programs": "C++ Programs",
-	    "📁 HTML Programs": "HTML Programs"
+    pdfs = {
+	"2014": "1EbgTIkFqA1InoTUhz3W4X5yL1J6U0ZYG",
+	"2015": "1J8HPOyUZiK16147Sl5rawNka-JrrDUA_",
+	"2016": "1hy4o9-bWOZnTYP2Xbz4uZittn0uUZax-",
+	"2017": "1-yKGRmnWNGZQFXn463gWD8SMCrWQaeCq",
+	"2018": "1FANxChrPnWIs1lBhxY5kq6emQUTYzL4a",
+	"2019": "",
+	"2020": "",
+	"2021": "",
+	"2022": "10XV1MB-yjA3OamGtjBy74tijNe1Qscu5",
+	"2023": "1loXzWNSl3fCzrgWDoogR75i_KXEKGnFC",
+	"2024": "1eHojj7Edyk4SBOCKS6c4gZvT1Zkvtira",
+	"2025": "1GeLqO2C9JlKc5j1DGeL4JZ5e8AbU_Tyi",
+        "1. Operating System": "1rDubBX_cgHA5j_GQVxSOzguLbtc9ZAD2",
+        "2. Data Structure": "1NEBWa3plmhmEyykahyH2sB9YwSKxyRTa",
+        "3. C++": "1LDU6oVsRRSgj-S-MdFrOuxq_VHNdjXvg",
+        "4. HTML": "1CIcF7_TMKa_hkgQxgX11H8EGoJjAbmSG"
+    }
+
+    search = st.text_input("🔎 Search PDF")
+
+    filtered = {
+        name: fid for name, fid in pdfs.items()
+        if search.lower() in name.lower()
+    }
+
+    if not filtered:
+        st.warning("No files found")
+
+    for name, fid in filtered.items():
+
+        view_link = f"https://drive.google.com/file/d/{fid}/preview"
+        download_link = f"https://drive.google.com/uc?id={fid}&export=download"
+
+        st.markdown(f"### 📘 {name}")
+
+        col1, col2 = st.columns([1, 1])
+
+        with col1:
+            st.link_button("👁️ View Full Screen", view_link)
+
+        with col2:
+            st.link_button("⬇️ Download", download_link)
+
+        st.components.v1.iframe(view_link, height=600)
+
+        st.divider()
+
+    st.success("All files loaded from Google Drive ⚡")
 
 
-        }
+# =========================================
+# 🚀 CONTROLLER
+# =========================================
 
-        for label, folder_path in resource_map.items():
-            # Setting expanded=False prevents the app from scanning files until clicked
-            with st.expander(label, expanded=False):
-                if os.path.exists(folder_path):
-                    files = [f for f in os.listdir(folder_path) if f.lower().endswith(".pdf")]
-                    if files:
-                        for filename in files:
-                            file_path = os.path.join(folder_path, filename)
-                            col_name, col_view, col_dl = st.columns([0.5, 0.25, 0.25])
-                            
-                            with col_name:
-                                st.write(f"📄 {filename}")
-                            
-                            # PERFORMANCE FIX: We only open the file inside the active expander
-                            with open(file_path, "rb") as f:
-                                pdf_bytes = f.read()
-                            
-                            with col_view:
-                                b64 = base64.b64encode(pdf_bytes).decode('utf-8')
-                                view_html = f'''<a href="data:application/pdf;base64,{b64}" target="_blank" style="text-decoration: none;"><div style="background-color: #ff4b4b; color: white; padding: 0.5rem; text-align: center; border-radius: 0.5rem; font-size: 0.8rem; font-weight: bold;">👁️ VIEW</div></a>'''
-                                st.markdown(view_html, unsafe_allow_html=True)
-                            
-                            with col_dl:
-                                st.download_button(label="💾 DOWNLOAD", data=pdf_bytes, file_name=filename, key=f"dl_{folder_path}_{filename}", use_container_width=True)
-                    else:
-                        st.write("No PDF files found.")
-                else:
-                    st.error(f"Folder '{folder_path}' not found.")
-    # --- OTHER SECTIONS ---
-    elif menu == "Add Questions":
-        st.header("➕ Add New Questions")
-        with st.form("q_form", clear_on_submit=True):
-            cat = st.selectbox("Category", ["1 Mark MCQ", "3 Marks Theory", "4 Marks Theory", "C++ Programs", "HTML Programs"])
-            q_text = st.text_input("Question")
-            if cat == "1 Mark MCQ":
-                c1, c2 = st.columns(2)
-                opts = [c1.text_input("Opt A"), c1.text_input("Opt B"), c2.text_input("Opt C"), c2.text_input("Opt D")]
-                ans = st.selectbox("Correct Answer", opts)
-            else:
-                ans = st.text_area("Answer/Code")
-            if st.form_submit_button("Save"):
-                st.session_state.question_list.append({"category": cat, "question": q_text, "answer": ans})
-                st.success("Question added!")
-
-    elif menu == "Revision Bank":
-        st.header("📖 Revision Bank")
-        for q in st.session_state.question_list:
-            with st.expander(f"{q['category']}: {q['question']}"):
-                st.write(q['answer'])
-
-    elif menu == "Test Section":
-        st.header("📝 Student Practice Test")
-        for idx, q in enumerate(st.session_state.question_list):
-            st.write(f"**Q{idx+1}: {q['question']}**")
-            st.text_area("Type Answer", key=f"test_{idx}")
+if st.session_state.logged_in:
+    main_app()
+else:
+    login_page()

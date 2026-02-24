@@ -32,13 +32,14 @@ This repository is intended for learning, development, and version control pract
 
 \## 🛠️ Technologies Used
 
-\- Programming Language: Python (update if different)
+\- Programming Language: Python
 
 \- Tools: Git, GitHub
 
 
 
 ---
+
 
 
 

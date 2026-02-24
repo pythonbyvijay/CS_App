@@ -4,7 +4,7 @@ import streamlit as st
 # 🔐 LOGIN CONFIG (CHANGE IF NEEDED)
 # =========================================
 
-USERNAME = "admin"
+USERNAME = "student1"
 PASSWORD = "1234"
 
 # =========================================
